@@ -14,3 +14,45 @@ The problem encountered.
 
 ## The intention and design of the fix.
 * In the `mqtt_client.on` function chain, if the callback type is 'message', then instead of adding the new callback, just replace the existing one with the new one, so there is only one message handling callback to execute.
+
+## Sample code
+```javascript
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import mqtt from 'mqttws/dist/mqtt';
+
+let options = {
+    username: "mqttid",
+    password: "mqttpassword",
+    clean: true,
+    rejectUnauthorized: false
+};
+
+let mqttClient = mqtt.connect('wss://localhost:9001', options);
+
+const Event = (props) => {
+    const { devId } = props.chosenDevice;
+    const [devEvent, setDevEvent] = useState();
+    
+    useEffect(() => {
+        mqttClient.subscribe('iot3/+/evt/#', {qos:0});
+        mqttClient.on('message', (topic, message) => {
+            console.log(topic + ' : ' + message.toString());
+            setDevEvent(message.toString());
+        });
+
+        return () => {
+            mqttClient.unsubscribe('iot3/+/evt/#');
+        };
+    }, [])
+
+    return (
+        <Box>
+            <h1>Device Id : {devId}</h1>
+            <h3>{devEvent}</h3>
+        </Box>
+    )
+}
+
+export default Event;
+```
