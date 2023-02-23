@@ -1,8 +1,7 @@
 # mqttws : WebSocket MQTT for React
-
+This is a temporary npm package to fix the message handler callback registration and may be removed when the fix is taken into the original library.
 
 ## Background
-This is a temporary npm package to fix the message handler callback registration. 
 
 The origianl code was taken from https://www.npmjs.com/package/mqtt and modified.
 
