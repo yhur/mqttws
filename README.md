@@ -17,6 +17,10 @@ The problem encountered.
 
 ## The intention and design of the fix.
 * In the `mqtt_client.on` function chain, if the callback type is 'message', then instead of adding the new callback, just replace the existing one with the new one, so there is only one message handling callback to execute.
+* The orignal code adds the callbacks to an array of callbacks when registered multiple times. ie. `client.on('message', callback)`.
+But for the message handling call back, we don't and can't have mulitple callbacks, so this code just replaces the callback when called again, meaning only the latest callback will be in effect.
+
+<img width="767" alt="Screenshot 2023-04-22 at 8 56 33 PM" src="https://user-images.githubusercontent.com/13171662/233783299-e2a282a7-72c5-4eee-81a8-cdcc71784b2f.png">
 
 ## Sample code
 ```javascript
